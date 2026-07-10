@@ -76,7 +76,7 @@ This is a **multi-class classification** problem with 11 possible classes.
 
 1. **Large and realistic** — 318k real-world admission records give enough data to train and properly validate ML models without overfitting concerns.
 2. **Rich mix of feature types** — numeric, ordinal, and categorical features allow the team to practice the full preprocessing pipeline (encoding, scaling, handling missing values) planned for Weeks 2–3.
-3. **Clean but not too clean** — it has a small, manageable amount of missing data (`Bed_Grade`, `City_Code_Patient`) and class imbalance, which gives Sanjay real EDA/cleaning work and makes the project realistic.
+3. **Clean but not too clean** — it has a small, manageable amount of missing data (`Bed_Grade`, `City_Code_Patient`) and class imbalance, which gives the EDA/cleaning stage real work and makes the project realistic.
 4. **Well-defined supervised target** — `Stay_Days` is a clear multi-class classification target with a meaningful business interpretation (resource planning and bed management for hospitals).
 5. **Well-known benchmark** — it comes from a public Analytics Vidhya hackathon, so published leaderboard scores exist that we can compare our model's accuracy against.
 
