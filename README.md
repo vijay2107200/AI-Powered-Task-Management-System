@@ -1,212 +1,80 @@
-# 🏥 Hospital Length-of-Stay Prediction — EDA & Insights
+# AI-Powered Task Management System
 
-> Predicting how long a patient will stay in the hospital, before they even reach their bed.
+An intelligent task management system that uses NLP and machine learning to **automatically classify, prioritize and assign tasks** based on their descriptions, deadlines and user workloads.
 
 [![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![Pandas](https://img.shields.io/badge/Pandas-Data%20Analysis-150458?logo=pandas&logoColor=white)](https://pandas.pydata.org/)
-[![Seaborn](https://img.shields.io/badge/Seaborn-Visualization-4C72B0)](https://seaborn.pydata.org/)
-[![Status](https://img.shields.io/badge/Status-EDA%20Complete-success)](#)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](#-license)
+[![NLTK](https://img.shields.io/badge/NLTK-NLP-154F5B)](https://www.nltk.org/)
+[![Status](https://img.shields.io/badge/Status-Week%201%20Complete-success)](#)
 
 ---
 
-## 📌 Overview
+## Problem Statement
 
-Hospitals lose millions in operational efficiency every year simply because they **don't know how long a patient will stay**. Bed allocation, staffing, and resource planning all hinge on this one number.
+Design and develop an intelligent task management system that leverages NLP and ML techniques to automatically classify, prioritize, and assign tasks to users based on their behavior, deadlines, and workloads.
 
-This project is a deep, ground-up **exploratory data analysis** of a real-world healthcare admissions dataset (**318,438 records**) with the goal of understanding what actually drives a patient's length of stay — before a single model gets trained.
-
-> 🎯 **Goal:** Turn raw hospital admission data into a clean, model-ready dataset — backed by evidence, not guesswork.
-
----
-
-## 🗂️ Table of Contents
-
-- [Dataset](#-dataset)
-- [Project Structure](#-project-structure)
-- [Data Quality Summary](#-data-quality-summary)
-- [Key EDA Findings](#-key-eda-findings)
-- [Visual Highlights](#-visual-highlights)
-- [Feature Engineering Roadmap](#-feature-engineering-roadmap)
-- [Tech Stack](#-tech-stack)
-- [How to Run](#-how-to-run)
-- [Deliverables](#-deliverables)
-- [Roadmap](#-roadmap)
-- [License](#-license)
-
----
-
-## 📊 Dataset
-
-| | |
-|---|---|
-| **Rows** | 318,438 |
-| **Columns** | 18 |
-| **Target** | `Stay_Days` — 11 ordinal buckets (`0-10` → `More than 100 Days`) |
-| **Domain** | Hospital admissions / healthcare analytics |
-| **Grain** | One row per patient admission (`case_id`), with repeat patients (`patientid`) present |
-
-<details>
-<summary><b>📋 Full column reference (click to expand)</b></summary>
-
-| Column | Type | Description |
-|---|---|---|
-| `case_id` | int | Unique admission record ID |
-| `Hospital` | int (encoded) | Hospital identifier |
-| `Hospital_type` | int (encoded) | Type/category of hospital |
-| `Hospital_city` | int (encoded) | City code of hospital |
-| `Hospital_region` | int (encoded) | Region code of hospital |
-| `Available_Extra_Rooms_in_Hospital` | int | Extra rooms available at time of admission |
-| `Department` | object | Medical department handling the case |
-| `Ward_Type` | object | Ward category |
-| `Ward_Facility` | object | Ward facility code |
-| `Bed_Grade` | float (ordinal) | Quality grade of bed assigned |
-| `patientid` | int | Patient identifier (repeats across visits) |
-| `City_Code_Patient` | float (encoded) | Patient's home city code |
-| `Type of Admission` | object | Emergency / Trauma / Urgent |
-| `Illness_Severity` | object | Extreme / Moderate / Minor |
-| `Patient_Visitors` | int | Number of visitors during stay |
-| `Age` | object (ordinal) | Age bracket of patient |
-| `Admission_Deposit` | float | Deposit amount paid at admission |
-| `Stay_Days` | object (ordinal, **target**) | Length-of-stay bucket |
-
-</details>
-
----
-
-## 🏗️ Project Structure
+## Project Structure
 
 ```
-hospital-los-prediction/
-│
 ├── data/
 │   ├── raw/
-│   │   └── host_train.csv
+│   │   └── tasks.csv               # 8,110 task records (synthetic, seeded)
 │   └── processed/
-│       └── train_clean.csv
-│
+│       ├── tasks_clean.csv         # deduplicated, imputed, consistent labels
+│       └── tasks_nlp.csv           # + preprocessed description text
+├── docs/
+│   └── DATASET.md                  # dataset documentation
 ├── notebooks/
-│   └── 01_eda.ipynb
-│
-├── reports/
-│   └── figures/
-│       ├── stay_days_distribution.png
-│       ├── correlation_heatmap.png
-│       └── categorical_vs_target/
-│
-├── README.md
-└── requirements.txt
+│   ├── 01_EDA_Data_Cleaning.ipynb  # EDA, missing values, duplicates, visualizations
+│   └── 02_NLP_Preprocessing.ipynb  # tokenization, stop words, lemmatization
+├── scripts/
+│   └── generate_task_dataset.py    # reproducible dataset generator (seed 42)
+└── README.md
 ```
 
----
+## Dataset
 
-## ✅ Data Quality Summary
+A **synthetic task management dataset** (8,110 rows → 8,000 after cleaning) modelled on Jira/Trello exports: free-text task descriptions, category, priority, status, deadlines, effort estimates and assignee workload fields. See [docs/DATASET.md](docs/DATASET.md) for full column descriptions and design rationale.
 
-| Check | Result |
+- **Week 2 classification target:** `category` (7 classes — Bug Fix, Feature, Testing, …)
+- **Week 3 priority target:** `priority` (Low / Medium / High / Critical)
+- **Workload balancing signals:** `assignee_open_tasks`, `assignee_experience_years`, `estimated_hours`
+
+## Week 1 Deliverables (complete)
+
+| Deliverable | Location |
 |---|---|
-| Duplicate rows | ✅ None found |
-| Missing values | ⚠️ Confined to `Bed_Grade` and `City_Code_Patient` (low volume, imputable) |
-| Column naming issues | ⚠️ `Type of Admission` → renamed to `Admission_Type` |
-| Repeat patients | ⚠️ Significant overlap in `patientid` — **must be handled during train/test split** to avoid leakage |
-| Encoding | Several columns pre-encoded as integers (`Hospital`, `Hospital_city`, etc.) — not truly continuous |
+| Task dataset collected + documented | `data/raw/tasks.csv`, `docs/DATASET.md` |
+| EDA & data cleaning (missing values, duplicates, inconsistent labels, visualizations) | `notebooks/01_EDA_Data_Cleaning.ipynb` |
+| Cleaned dataset | `data/processed/tasks_clean.csv` |
+| NLP preprocessing (lowercase, punctuation removal, tokenization, stop words, lemmatization) | `notebooks/02_NLP_Preprocessing.ipynb` |
+| Preprocessed dataset | `data/processed/tasks_nlp.csv` |
 
-> 🔑 **Verdict:** The dataset is large and clean enough to model directly after light imputation and a handful of structural fixes.
+### Key EDA findings
 
----
+- `category` is imbalanced (Bug Fix ~28% … Research ~5%) → stratified splits needed in Week 2
+- `days_to_deadline` correlates strongly (negatively) with priority — the core Week 3 signal
+- Effort estimates are log-normal shaped → median imputation used
+- Workload/experience fields are independent of priority → reserved for assignment logic
 
-## 🔍 Key EDA Findings
-
-1. **🎯 Imbalanced target.** `Stay_Days` is dominated by the `21-30` and `11-20` buckets, while long-stay buckets (`61-70`, `81-90`, `91-100`) are rare. → Stratified splitting + class weighting (or bucket consolidation) required.
-
-2. **🩺 Illness_Severity and Type of Admission are real signal.** These features shift the *shape* of the stay-length distribution — not just the volume — making them strong predictive candidates.
-
-3. **🏥 Department & Ward_Type are volume-skewed.** Gynecology and Wards R/S/Q dominate the dataset; rare categories should be grouped into `"Other"` to prevent sparse, noisy levels from destabilizing models.
-
-4. **👤 Age has a moderate effect.** Signal is strongest and most reliable in the 31–60 bracket; very young/old groups are sparse.
-
-5. **🔢 Ordinal features need ordinal encoding.** Both `Age` and `Stay_Days` are ordered string ranges — encoding them as arbitrary categories throws away valuable ordering information.
-
-6. **📈 Skewed numeric features.** `Available_Extra_Rooms_in_Hospital` and `Patient_Visitors` are right-skewed with long tails → candidates for capping or log-transformation.
-
-7. **💰 Admission_Deposit is clean.** Roughly bell-shaped, centered around ₹4,500–5,000 — ready for standard scaling with no major preprocessing needed.
-
----
-
-## 🖼️ Visual Highlights
-
-| Distribution of Stay Duration | Feature Relationships |
-|:---:|:---:|
-| Right-skewed, 11-bucket ordinal target with a long tail | Illness Severity & Admission Type reshape stay-length distribution |
-
-*(Full visualizations — histograms, count plots, correlation heatmaps, and boxplots — are available in `notebooks/01_eda.ipynb`.)*
-
----
-
-## 🛠️ Feature Engineering Roadmap
-
-- [ ] Rename `Type of Admission` → `Admission_Type`
-- [ ] Ordinal-encode `Age` and `Stay_Days`
-- [ ] Group rare `Department` and `Ward_Type` categories into `"Other"`
-- [ ] Impute `Bed_Grade` and `City_Code_Patient`
-- [ ] Log-transform / cap outliers in `Patient_Visitors` and `Available_Extra_Rooms_in_Hospital`
-- [ ] Patient-aware train/test split (group by `patientid`) to prevent leakage
-- [ ] Evaluate bucket consolidation for extreme target class imbalance
-
----
-
-## 🧰 Tech Stack
-
-| Purpose | Tool |
-|---|---|
-| Data manipulation | `pandas`, `numpy` |
-| Visualization | `matplotlib`, `seaborn` |
-| Environment | Jupyter Notebook |
-| Language | Python 3.9+ |
-
----
-
-## 🚀 How to Run
+## How to Run
 
 ```bash
-# Clone the repository
-git clone https://github.com/<your-username>/hospital-los-prediction.git
-cd hospital-los-prediction
+pip install pandas numpy matplotlib seaborn nltk jupyter
 
-# Install dependencies
-pip install -r requirements.txt
+# (optional) regenerate the dataset — deterministic, seed 42
+python scripts/generate_task_dataset.py
 
-# Launch the EDA notebook
-jupyter notebook notebooks/01_eda.ipynb
+# run the notebooks in order
+jupyter notebook notebooks/01_EDA_Data_Cleaning.ipynb
+jupyter notebook notebooks/02_NLP_Preprocessing.ipynb
 ```
 
----
+All notebook paths are relative to the repository — no local absolute paths required.
 
-## 📦 Deliverables
+## Roadmap
 
-- ✅ Cleaned dataset — `data/processed/train_clean.csv` (318,438 rows × 18 columns, missing values imputed)
-- ✅ Full EDA notebook with all visualizations and written observations
-- ✅ This README, documenting findings for reviewers, collaborators, and future-you
-
----
-
-## 🗺️ Roadmap
-
-- [x] **Week 1:** Data cleaning & exploratory data analysis
-- [ ] **Week 2:** Feature engineering & ordinal encoding
-- [ ] **Week 3:** Baseline modelling (Logistic Regression, Random Forest, XGBoost)
-- [ ] **Week 4:** Class imbalance handling & hyperparameter tuning
-- [ ] **Week 5:** Final model evaluation & deployment-ready pipeline
-
----
-
-## 📄 License
-
-This project is licensed under the [MIT License](LICENSE).
-
----
-
-<div align="center">
-
-**⭐ If this project helped you understand hospital length-of-stay data, consider starring the repo!**
-
-</div>
+- **Week 1 — done:** dataset collection, EDA & cleaning, NLP preprocessing
+- **Week 2:** TF-IDF / word-embedding features; task classification with Naive Bayes & SVM; evaluation (accuracy, precision, recall)
+- **Week 3:** priority prediction (Random Forest / XGBoost), workload-balancing logic, GridSearchCV tuning
+- **Week 4:** final models, dashboard mockup, performance report
