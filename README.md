@@ -5,7 +5,7 @@ An intelligent task management system that uses NLP and machine learning to **au
 [![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![Pandas](https://img.shields.io/badge/Pandas-Data%20Analysis-150458?logo=pandas&logoColor=white)](https://pandas.pydata.org/)
 [![NLTK](https://img.shields.io/badge/NLTK-NLP-154F5B)](https://www.nltk.org/)
-[![Status](https://img.shields.io/badge/Status-Week%201%20Complete-success)](#)
+[![Status](https://img.shields.io/badge/Status-Week%202%20In%20Progress-blue)](#)
 
 ---
 
@@ -23,10 +23,14 @@ Design and develop an intelligent task management system that leverages NLP and 
 │       ├── tasks_clean.csv         # deduplicated, imputed, consistent labels
 │       └── tasks_nlp.csv           # + preprocessed description text
 ├── docs/
-│   └── DATASET.md                  # dataset documentation
+│   ├── DATASET.md                  # dataset documentation
+│   └── WEEK2_PLAN.md               # Week 2 task allocation & branch workflow
+├── models/                         # saved vectorizers / splits / models (Week 2+)
 ├── notebooks/
 │   ├── 01_EDA_Data_Cleaning.ipynb  # EDA, missing values, duplicates, visualizations
 │   └── 02_NLP_Preprocessing.ipynb  # tokenization, stop words, lemmatization
+├── reports/
+│   └── mid_project_review.md       # mid-project review pack (end of Week 2)
 ├── scripts/
 │   └── generate_task_dataset.py    # reproducible dataset generator (seed 42)
 └── README.md
@@ -75,6 +79,6 @@ All notebook paths are relative to the repository — no local absolute paths re
 ## Roadmap
 
 - **Week 1 — done:** dataset collection, EDA & cleaning, NLP preprocessing
-- **Week 2:** TF-IDF / word-embedding features; task classification with Naive Bayes & SVM; evaluation (accuracy, precision, recall)
+- **Week 2 — in progress:** TF-IDF / word-embedding features; task classification with Naive Bayes & SVM; evaluation (accuracy, precision, recall) — see [docs/WEEK2_PLAN.md](docs/WEEK2_PLAN.md)
 - **Week 3:** priority prediction (Random Forest / XGBoost), workload-balancing logic, GridSearchCV tuning
 - **Week 4:** final models, dashboard mockup, performance report
