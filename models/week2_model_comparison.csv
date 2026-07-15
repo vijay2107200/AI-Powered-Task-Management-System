@@ -1,0 +1,4 @@
+Model,Features,Accuracy,Macro Precision,Macro Recall,Macro F1,Research Recall
+Naive Bayes,TF-IDF (shared),0.816,0.788,0.811,0.797,0.778
+Linear SVM,TF-IDF (shared),0.815,0.791,0.821,0.795,0.88
+Linear SVM,Word2Vec (avg),0.803,0.776,0.804,0.782,0.843
