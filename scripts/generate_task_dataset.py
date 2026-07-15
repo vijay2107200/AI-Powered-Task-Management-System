@@ -96,6 +96,29 @@ TEMPLATES = {
 CATEGORIES = list(TEMPLATES)
 CATEGORY_WEIGHTS = [0.28, 0.24, 0.10, 0.14, 0.09, 0.10, 0.05]
 
+# Ambiguous phrasings that legitimately occur under more than one category on
+# real task boards — sampled ~25% of the time so classes overlap lexically.
+AMBIGUOUS_TEMPLATES = [
+    ("Update the {c} after the recent review comments",
+     ["Feature", "Maintenance", "Documentation"]),
+    ("Improve performance of the {c}", ["Maintenance", "Feature", "Research"]),
+    ("Investigate the slow response of the {c}", ["Bug Fix", "Research", "Maintenance"]),
+    ("Review recent changes made to the {c}", ["Testing", "Maintenance", "Documentation"]),
+    ("Check why the {c} is not working as expected", ["Bug Fix", "Testing"]),
+    ("Update configuration for the {c}", ["Deployment", "Maintenance"]),
+    ("Prepare the {c} for the next release", ["Deployment", "Feature", "Testing"]),
+    ("Look into user reports about the {c}", ["Bug Fix", "Research"]),
+    ("Verify the {c} works after the latest update", ["Testing", "Deployment", "Bug Fix"]),
+    ("Clean up and reorganize the {c}", ["Maintenance", "Documentation"]),
+    ("Analyze current behavior of the {c}", ["Research", "Testing"]),
+    ("Update dependencies and re-test the {c}", ["Maintenance", "Testing", "Deployment"]),
+    ("Improve error handling in the {c}", ["Bug Fix", "Feature", "Maintenance"]),
+    ("Document and fix the issues found in the {c}", ["Documentation", "Bug Fix"]),
+    ("Set up monitoring for the {c}", ["Deployment", "Maintenance", "Feature"]),
+]
+
+LABEL_NOISE_RATE = 0.05  # real boards contain miscategorized tasks
+
 URGENT_MARKERS = ["URGENT: ", "ASAP - ", "[HIGH IMPACT] ", ""]
 
 STATUSES = ["Open", "In Progress", "Completed", "Blocked"]
@@ -115,8 +138,13 @@ user_workload = {u: np.random.randint(1, 21) for u in users}
 rows = []
 start = date(2026, 1, 5)
 for i in range(N_TASKS):
-    cat = random.choices(CATEGORIES, weights=CATEGORY_WEIGHTS, k=1)[0]
-    desc = random.choice(TEMPLATES[cat]).format(c=random.choice(COMPONENTS))
+    if random.random() < 0.25:
+        template, plausible = random.choice(AMBIGUOUS_TEMPLATES)
+        cat = random.choice(plausible)
+        desc = template.format(c=random.choice(COMPONENTS))
+    else:
+        cat = random.choices(CATEGORIES, weights=CATEGORY_WEIGHTS, k=1)[0]
+        desc = random.choice(TEMPLATES[cat]).format(c=random.choice(COMPONENTS))
 
     est = float(np.round(np.random.lognormal(*EFFORT[cat]), 1))
     est = min(est, 80.0)
@@ -172,6 +200,13 @@ df = pd.DataFrame(rows)
 
 # ---- inject realistic data-quality problems (to be handled in cleaning) ----
 rng = np.random.default_rng(SEED)
+
+# label noise: a small share of tasks are miscategorized, as on real boards
+noise_idx = rng.choice(N_TASKS, int(N_TASKS * LABEL_NOISE_RATE), replace=False)
+df.loc[noise_idx, "category"] = [
+    random.choice([c for c in CATEGORIES if c != cur])
+    for cur in df.loc[noise_idx, "category"]
+]
 
 # 1) missing values
 df.loc[rng.choice(N_TASKS, 180, replace=False), "estimated_hours"] = np.nan
