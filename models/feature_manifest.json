@@ -1,0 +1,49 @@
+{
+  "source_file": "../data/processed/tasks_nlp.csv",
+  "n_rows_used": 8000,
+  "test_size": 0.2,
+  "random_state": 42,
+  "stratify_column": "category",
+  "tfidf": {
+    "config_used": "unigram_bigram_default",
+    "params": {
+      "ngram_range": [
+        1,
+        2
+      ],
+      "min_df": 2,
+      "max_features": 5000
+    },
+    "vocab_size": 1814,
+    "files": [
+      "tfidf_vectorizer.joblib",
+      "tfidf_matrix.joblib",
+      "tfidf_train.joblib",
+      "tfidf_test.joblib"
+    ]
+  },
+  "word2vec": {
+    "params": {
+      "vector_size": 100,
+      "window": 5,
+      "min_count": 2,
+      "workers": 4,
+      "sg": 1,
+      "epochs": 20,
+      "seed": 42
+    },
+    "vocab_size": 220,
+    "files": [
+      "word2vec_model.model",
+      "word2vec_doc_vectors.joblib",
+      "w2v_train.joblib",
+      "w2v_test.joblib"
+    ]
+  },
+  "split_files": [
+    "train_idx.joblib",
+    "test_idx.joblib",
+    "y_train.joblib",
+    "y_test.joblib"
+  ]
+}
