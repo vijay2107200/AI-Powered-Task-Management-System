@@ -1,5 +1,5 @@
 ,vocab_size,matrix_shape,density_pct,fit_time_sec
 unigram_default,220,"(8000, 220)",2.8567,0.05
-unigram_bigram_default,1814,"(8000, 1814)",0.6386,0.07
-unigram_bigram_strict,1459,"(8000, 1459)",0.7842,0.08
+unigram_bigram_default,1814,"(8000, 1814)",0.6386,0.06
+unigram_bigram_strict,1459,"(8000, 1459)",0.7842,0.06
 unigram_bigram_wide,1879,"(8000, 1879)",0.617,0.07

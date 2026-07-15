@@ -68,5 +68,5 @@ Rules:
 
 - [x] Cleaned and preprocessed dataset (`data/processed/tasks_clean.csv`, `tasks_nlp.csv`)
 - [x] EDA visualizations completed (`notebooks/01_EDA_Data_Cleaning.ipynb`)
-- [ ] Task classifier (Naive Bayes/SVM) trained and evaluated
-- [ ] Evaluation metrics (accuracy, precision, recall) documented
+- [x] Task classifier (Naive Bayes/SVM) trained and evaluated (notebooks 04 & 05)
+- [x] Evaluation metrics (accuracy, precision, recall) documented (`reports/week2_model_comparison.md`)

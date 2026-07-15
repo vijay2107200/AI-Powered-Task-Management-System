@@ -9,7 +9,7 @@
 |---|---|---|
 | Cleaned and preprocessed dataset | ✅ Done | `data/processed/tasks_clean.csv`, `data/processed/tasks_nlp.csv` |
 | EDA visualizations completed | ✅ Done | `notebooks/01_EDA_Data_Cleaning.ipynb` |
-| Task classifier (Naive Bayes/SVM) trained and evaluated | ⏳ In progress | `notebooks/04_NaiveBayes_Classifier.ipynb`, `notebooks/05_SVM_Classifier.ipynb` |
+| Task classifier (Naive Bayes/SVM) trained and evaluated | ✅ Done | `notebooks/04_NaiveBayes_Classifier.ipynb`, `notebooks/05_SVM_Classifier.ipynb` |
 
 ## 2. Week 1 Summary
 
@@ -23,26 +23,34 @@
 
 ## 3. Week 2 Results
 
-*(to be filled as PRs merge)*
+### Feature extraction (`notebooks/03_Feature_Extraction.ipynb`)
+- TF-IDF configuration chosen: **unigram+bigram, `min_df=2`, `max_features=5000`,
+  sublinear TF** (best balance of vocabulary size vs. signal across 4 tested configs)
+- Word2Vec: skip-gram, 100 dimensions, 20 epochs, averaged into document vectors
+- Shared stratified 80/20 split saved to `models/` and used by **both** classifiers
 
-### Feature extraction
-- TF-IDF configuration chosen: _TBD_
-- Word2Vec / embedding comparison: _TBD_
+### Model evaluation (shared stratified test split, 1,600 tasks)
 
-### Model evaluation (shared stratified test split)
+| Model | Features | Accuracy | Macro Precision | Macro Recall | Macro F1 |
+|---|---|---|---|---|---|
+| Naive Bayes (α=0.01) | TF-IDF | 0.816 | 0.788 | 0.811 | 0.797 |
+| **Linear SVM** | TF-IDF | 0.815 | 0.791 | 0.821 | 0.795 |
+| Linear SVM | Word2Vec (avg) | 0.803 | 0.776 | 0.804 | 0.782 |
 
-| Model | Features | Accuracy | Macro Precision | Macro Recall |
-|---|---|---|---|---|
-| Naive Bayes | TF-IDF | _TBD_ | _TBD_ | _TBD_ |
-| Linear SVM | TF-IDF | _TBD_ | _TBD_ | _TBD_ |
-| Linear SVM | Word2Vec | _TBD_ | _TBD_ | _TBD_ |
+Full analysis: `reports/week2_model_comparison.md`
 
 ### Recommendation for Week 3
-_TBD after comparison._
+**Linear SVM on TF-IDF** (`models/svm_tfidf.joblib`) — ties Naive Bayes on macro-F1
+but with clearly better recall on the rarest class (Research: 0.88 vs 0.78), so it
+degrades least across all task types. Week 3 priority prediction will combine this
+TF-IDF pipeline with `days_to_deadline` and `estimated_hours` using Random
+Forest / XGBoost.
 
 ## 4. Risks / Notes
 
-- `category` is imbalanced (Research ~5%) — all metrics reported per-class and macro,
-  splits stratified
-- Priority prediction (Week 3) will reuse the same feature pipeline plus
-  `days_to_deadline` and `estimated_hours`
+- `category` is imbalanced (Research ~7%) — handled with stratified splits, balanced
+  class weights and macro-averaged metrics throughout
+- The dataset contains ~5% label noise by design (realism), which caps achievable
+  accuracy around 0.95; current models reach ~0.82
+- All notebooks run top-to-bottom with repo-relative paths (`pip install -r` style
+  setup documented in the README)
