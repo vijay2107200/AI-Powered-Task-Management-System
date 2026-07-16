@@ -5,7 +5,7 @@ An intelligent task management system that uses NLP and machine learning to **au
 [![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![Pandas](https://img.shields.io/badge/Pandas-Data%20Analysis-150458?logo=pandas&logoColor=white)](https://pandas.pydata.org/)
 [![NLTK](https://img.shields.io/badge/NLTK-NLP-154F5B)](https://www.nltk.org/)
-[![Status](https://img.shields.io/badge/Status-Week%202%20In%20Progress-blue)](#)
+[![Status](https://img.shields.io/badge/Status-Week%203%20In%20Progress-blue)](#)
 
 ---
 
@@ -24,7 +24,8 @@ Design and develop an intelligent task management system that leverages NLP and 
 │       └── tasks_nlp.csv           # + preprocessed description text
 ├── docs/
 │   ├── DATASET.md                  # dataset documentation
-│   └── WEEK2_PLAN.md               # Week 2 task allocation & branch workflow
+│   ├── WEEK2_PLAN.md               # Week 2 task allocation & branch workflow
+│   └── WEEK3_PLAN.md               # Week 3 task allocation & branch workflow
 ├── models/                         # saved vectorizers / splits / models (Week 2+)
 ├── notebooks/
 │   ├── 01_EDA_Data_Cleaning.ipynb  # EDA, missing values, duplicates, visualizations
@@ -79,6 +80,6 @@ All notebook paths are relative to the repository — no local absolute paths re
 ## Roadmap
 
 - **Week 1 — done:** dataset collection, EDA & cleaning, NLP preprocessing
-- **Week 2 — in progress:** TF-IDF / word-embedding features; task classification with Naive Bayes & SVM; evaluation (accuracy, precision, recall) — see [docs/WEEK2_PLAN.md](docs/WEEK2_PLAN.md)
-- **Week 3:** priority prediction (Random Forest / XGBoost), workload-balancing logic, GridSearchCV tuning
+- **Week 2 — done:** TF-IDF / word-embedding features; task classification with Naive Bayes & SVM; evaluation in [reports/week2_model_comparison.md](reports/week2_model_comparison.md) — see [docs/WEEK2_PLAN.md](docs/WEEK2_PLAN.md)
+- **Week 3 — in progress:** priority prediction (Random Forest / XGBoost), workload-balancing logic, GridSearchCV tuning — see [docs/WEEK3_PLAN.md](docs/WEEK3_PLAN.md)
 - **Week 4:** final models, dashboard mockup, performance report
