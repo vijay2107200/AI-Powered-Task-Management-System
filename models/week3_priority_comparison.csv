@@ -1,0 +1,3 @@
+Model,Accuracy,Macro Precision,Macro Recall,Macro F1,Critical Recall
+Random Forest (nb06 params),0.559,0.557,0.556,0.538,0.793
+XGBoost (tuned),0.631,0.644,0.636,0.638,0.819
