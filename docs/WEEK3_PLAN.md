@@ -72,9 +72,10 @@ Rules (unchanged from Week 2):
 
 ## Week 3 Checklist
 
-- [ ] Priority feature matrix saved to `models/` (shared by both models)
-- [ ] Random Forest tuned (GridSearchCV) and evaluated on the shared split
-- [ ] XGBoost tuned (GridSearchCV) and evaluated on the shared split
-- [ ] RF vs. XGBoost comparison documented with a Week 4 recommendation
-- [ ] Workload balancer implemented, simulated and visualized
-- [ ] End-to-end integration verified (task → priority → suggested assignee)
+- [x] Priority feature matrix saved to `models/` (shared by both models)
+- [x] Random Forest tuned (GridSearchCV) and evaluated on the shared split
+- [x] XGBoost tuned (GridSearchCV) and evaluated on the shared split
+- [x] RF vs. XGBoost comparison documented with a Week 4 recommendation
+- [x] Workload balancer implemented, simulated and visualized
+- [x] End-to-end integration verified (task → priority → suggested assignee) —
+      see `notebooks/09_Integration_Check.ipynb`
