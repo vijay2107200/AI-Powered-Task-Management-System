@@ -1,0 +1,65 @@
+{
+  "target": "priority",
+  "features": {
+    "tfidf": {
+      "source": "../models/tfidf_train.joblib / tfidf_test.joblib",
+      "n_features": 1814
+    },
+    "numeric": [
+      "days_to_deadline",
+      "estimated_hours",
+      "story_points"
+    ],
+    "category_encoded": [
+      "category_Bug Fix",
+      "category_Deployment",
+      "category_Documentation",
+      "category_Feature",
+      "category_Maintenance",
+      "category_Research",
+      "category_Testing"
+    ]
+  },
+  "split": {
+    "source": "../models/train_idx.joblib / test_idx.joblib",
+    "n_train": 6400,
+    "n_test": 1600
+  },
+  "model": "RandomForestClassifier",
+  "grid_search": {
+    "param_grid": {
+      "n_estimators": [
+        100,
+        300
+      ],
+      "max_depth": [
+        null,
+        20
+      ],
+      "min_samples_leaf": [
+        1,
+        4
+      ],
+      "class_weight": [
+        null,
+        "balanced"
+      ]
+    },
+    "scoring": "f1_macro",
+    "cv_folds": 5,
+    "best_params": {
+      "class_weight": null,
+      "max_depth": null,
+      "min_samples_leaf": 4,
+      "n_estimators": 100
+    },
+    "best_cv_macro_f1": 0.5507730281472111
+  },
+  "test_metrics": {
+    "accuracy": 0.55875,
+    "macro_precision": 0.5567139187262735,
+    "macro_recall": 0.5558158261433475,
+    "macro_f1": 0.5381028973982371
+  },
+  "top_feature": "days_to_deadline"
+}
