@@ -1,85 +1,51 @@
-# AI-Powered Task Management System
+# Summary Dashboard — Usage Note
 
-An intelligent task management system that uses NLP and machine learning to **automatically classify, prioritize and assign tasks** based on their descriptions, deadlines and user workloads.
+`app/dashboard.py` is the Week 4 "summary dashboard/mockup" deliverable: a
+Streamlit interface where you paste a task description + deadline/effort and
+get back a predicted category, predicted priority, and suggested assignee,
+plus a live team workload chart.
 
-[![Python](https://img.shields.io/badge/Python-3.9%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![Pandas](https://img.shields.io/badge/Pandas-Data%20Analysis-150458?logo=pandas&logoColor=white)](https://pandas.pydata.org/)
-[![NLTK](https://img.shields.io/badge/NLTK-NLP-154F5B)](https://www.nltk.org/)
-[![Status](https://img.shields.io/badge/Status-Week%203%20In%20Progress-blue)](#)
+## What's real vs. placeholder
 
----
+| Piece | Status | Source |
+|---|---|---|
+| Assignee suggestion | ✅ **Real** | `scripts/workload_balancer.py` (Week 3 deliverable, validated in `notebooks/08_Workload_Balancing.ipynb`) |
+| Category prediction | ⚠️ Placeholder heuristic | keyword matching in `dashboard.py` |
+| Priority prediction | ⚠️ Placeholder heuristic | deadline/effort rule in `dashboard.py` |
 
-## Problem Statement
+Category and priority are still placeholders because notebooks 03–07
+(feature extraction, Naive Bayes/SVM classifiers, priority model) haven't
+landed yet — there's no trained model artifact to load for those two. The
+assignee step, however, now uses the actual `WorkloadBalancer` scoring
+engine: experience-fit vs. task difficulty, minus a live workload penalty,
+exactly as validated in the notebook (93% reduction in workload std-dev
+vs. the as-recorded baseline).
 
-Design and develop an intelligent task management system that leverages NLP and ML techniques to automatically classify, prioritize, and assign tasks to users based on their behavior, deadlines, and workloads.
+The dashboard keeps one live `WorkloadBalancer` per session — each
+"Predict + Assign" click both suggests *and* commits an assignment (like
+the notebook's `assign()`), so the workload chart updates in real time as
+you add tasks. Use **Reset workload** to return to the starting snapshot.
 
-## Project Structure
+Once the classifier/priority notebooks land, swap in the real model calls
+inside `predict_category()` and `predict_priority()` in `dashboard.py` — no
+other part of the app (layout, chart, assignment logic) needs to change.
 
-```
-├── data/
-│   ├── raw/
-│   │   └── tasks.csv               # 8,110 task records (synthetic, seeded)
-│   └── processed/
-│       ├── tasks_clean.csv         # deduplicated, imputed, consistent labels
-│       └── tasks_nlp.csv           # + preprocessed description text
-├── docs/
-│   ├── DATASET.md                  # dataset documentation
-│   ├── WEEK2_PLAN.md               # Week 2 task allocation & branch workflow
-│   └── WEEK3_PLAN.md               # Week 3 task allocation & branch workflow
-├── models/                         # saved vectorizers / splits / models (Week 2+)
-├── notebooks/
-│   ├── 01_EDA_Data_Cleaning.ipynb  # EDA, missing values, duplicates, visualizations
-│   └── 02_NLP_Preprocessing.ipynb  # tokenization, stop words, lemmatization
-├── reports/
-│   └── mid_project_review.md       # mid-project review pack (end of Week 2)
-├── scripts/
-│   └── generate_task_dataset.py    # reproducible dataset generator (seed 42)
-└── README.md
-```
-
-## Dataset
-
-A **synthetic task management dataset** (8,110 rows → 8,000 after cleaning) modelled on Jira/Trello exports: free-text task descriptions, category, priority, status, deadlines, effort estimates and assignee workload fields. See [docs/DATASET.md](docs/DATASET.md) for full column descriptions and design rationale.
-
-- **Week 2 classification target:** `category` (7 classes — Bug Fix, Feature, Testing, …)
-- **Week 3 priority target:** `priority` (Low / Medium / High / Critical)
-- **Workload balancing signals:** `assignee_open_tasks`, `assignee_experience_years`, `estimated_hours`
-
-## Week 1 Deliverables (complete)
-
-| Deliverable | Location |
-|---|---|
-| Task dataset collected + documented | `data/raw/tasks.csv`, `docs/DATASET.md` |
-| EDA & data cleaning (missing values, duplicates, inconsistent labels, visualizations) | `notebooks/01_EDA_Data_Cleaning.ipynb` |
-| Cleaned dataset | `data/processed/tasks_clean.csv` |
-| NLP preprocessing (lowercase, punctuation removal, tokenization, stop words, lemmatization) | `notebooks/02_NLP_Preprocessing.ipynb` |
-| Preprocessed dataset | `data/processed/tasks_nlp.csv` |
-
-### Key EDA findings
-
-- `category` is imbalanced (Bug Fix ~28% … Research ~5%) → stratified splits needed in Week 2
-- `days_to_deadline` correlates strongly (negatively) with priority — the core Week 3 signal
-- Effort estimates are log-normal shaped → median imputation used
-- Workload/experience fields are independent of priority → reserved for assignment logic
-
-## How to Run
+## Run it
 
 ```bash
-pip install pandas numpy matplotlib seaborn nltk jupyter
-
-# (optional) regenerate the dataset — deterministic, seed 42
-python scripts/generate_task_dataset.py
-
-# run the notebooks in order
-jupyter notebook notebooks/01_EDA_Data_Cleaning.ipynb
-jupyter notebook notebooks/02_NLP_Preprocessing.ipynb
+pip install streamlit pandas
+streamlit run app/dashboard.py   # run from the repo root
 ```
 
-All notebook paths are relative to the repository — no local absolute paths required.
+Opens at `http://localhost:8501`. Enter a task description, pick a
+deadline, set estimated effort, and click **Predict + Assign**.
 
-## Roadmap
+## File layout
 
-- **Week 1 — done:** dataset collection, EDA & cleaning, NLP preprocessing
-- **Week 2 — done:** TF-IDF / word-embedding features; task classification with Naive Bayes & SVM; evaluation in [reports/week2_model_comparison.md](reports/week2_model_comparison.md) — see [docs/WEEK2_PLAN.md](docs/WEEK2_PLAN.md)
-- **Week 3 — in progress:** priority prediction (Random Forest / XGBoost), workload-balancing logic, GridSearchCV tuning — see [docs/WEEK3_PLAN.md](docs/WEEK3_PLAN.md)
-- **Week 4:** final models, dashboard mockup, performance report
+```
+scripts/
+└── workload_balancer.py   # real assignee-scoring engine (Week 3)
+app/
+├── dashboard.py            # the Streamlit dashboard
+└── README.md                # this file
+```
